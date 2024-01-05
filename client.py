@@ -1,5 +1,4 @@
 import socket
-import threading
 
 # Function to receive messages from the friend
 def receive_messages(client_socket):

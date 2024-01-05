@@ -1,5 +1,4 @@
 import socket
-import threading
 
 SERVER_IP = "0.0.0.0"
 PORT = 5555
