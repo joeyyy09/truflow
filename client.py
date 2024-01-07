@@ -29,17 +29,16 @@ def send_messages(client_socket):
 
 def receive_files(server_socket):
     file_name = server_socket.recv(1024).decode()
-    print(file_name)
-
+    #file size is decoded 
     file_size_bytes = b""
     while True:
         size_chunk = server_socket.recv(1)
         if size_chunk == b"\n":
             break
         file_size_bytes += size_chunk
-
     file_size = int(file_size_bytes.decode())
 
+    # data is received in chunks and writes in the file
     received_data = b""
     while len(received_data) < file_size:
         chunk = server_socket.recv(4096)
@@ -47,6 +46,7 @@ def receive_files(server_socket):
             break
         received_data += chunk
 
+    # creates a recv directory if not exists
     os.makedirs('recv', exist_ok=True)
 
     with open(f'recv/{file_name}', 'wb') as file:
