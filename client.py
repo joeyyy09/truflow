@@ -1,6 +1,7 @@
 import socket
 import sys
-import threading
+import os
+
 # Function to receive messages from the friend
 def receive_messages(client_socket):
     try:
@@ -27,12 +28,31 @@ def send_messages(client_socket):
         sys.exit()
 
 def receive_files(server_socket):
-    file_name = input(str("enter the name of the file: "))
-    file = open(file_name,"wb")
-    file_data = server_socket.recv(1024)
-    file.write(file_data)
-    file.close()
-    print("data has been received successfully")
+    file_name = server_socket.recv(1024).decode()
+    print(file_name)
+
+    file_size_bytes = b""
+    while True:
+        size_chunk = server_socket.recv(1)
+        if size_chunk == b"\n":
+            break
+        file_size_bytes += size_chunk
+
+    file_size = int(file_size_bytes.decode())
+
+    received_data = b""
+    while len(received_data) < file_size:
+        chunk = server_socket.recv(4096)
+        if not chunk:
+            break
+        received_data += chunk
+
+    os.makedirs('recv', exist_ok=True)
+
+    with open(f'recv/{file_name}', 'wb') as file:
+        file.write(received_data)
+
+    print("Data has been received successfully")
 
 # Function to start the client and establish a connection with the friend
 def start_client():
@@ -45,11 +65,9 @@ def start_client():
     # Connect to the friend's IP and port
     client.connect((friend_ip, friend_port))
 
-    receive_file_thread = threading.Thread(target=receive_files, args=(client,))
-    receive_file_thread.start()
-    receive_file_thread.join()
+    receive_files(client)
 
-    thread = 1
+    thread = 0
     try:
         while True:
             if thread == 1:

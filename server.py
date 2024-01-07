@@ -1,6 +1,6 @@
 import socket
 import sys
-import threading
+import os
 
 SERVER_IP = "0.0.0.0"
 PORT = 6666
@@ -31,10 +31,15 @@ def send_messages(client_socket):
         sys.exit()
 
 def send_files(client_socket):
-    file_name = input(str("enter the file name to be sent: "))
-    file = open(file_name,"rb")
-    file_data = file.read(1024)
-    client_socket.send(file_data)
+    file_name = input("enter the file name to be sent: ")
+    file_size = str(os.path.getsize(file_name)) + '\n'
+
+    client_socket.send(file_name.encode())
+    client_socket.send(file_size.encode())
+    
+    with open(file_name,"rb") as file:
+            sendfile = file.read()
+            client_socket.sendall(sendfile)
     print("Data has been sent successfully")
 
 
@@ -54,12 +59,9 @@ def start_server():
     client, addr = server.accept()
     print(f"Accepted connection from {addr}")
     
+    send_files(client)
 
-    client_files = threading.Thread(target=send_files, args=(client,))
-    client_files.start()
-    client_files.join()
-
-    thread = 0
+    thread = 1
     try:
         while True:
             if thread == 1:
