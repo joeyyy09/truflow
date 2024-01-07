@@ -1,5 +1,6 @@
 import socket
 import sys
+import threading
 
 SERVER_IP = "0.0.0.0"
 PORT = 6666
@@ -29,6 +30,14 @@ def send_messages(client_socket):
         print("\nConnection closed.")
         sys.exit()
 
+def send_files(client_socket):
+    file_name = input(str("enter the file name to be sent: "))
+    file = open(file_name,"rb")
+    file_data = file.read(1024)
+    client_socket.send(file_data)
+    print("Data has been sent successfully")
+
+
 # Function to start the server
 def start_server():
     # Create a socket object for the server
@@ -44,6 +53,11 @@ def start_server():
     # Accept a client connection
     client, addr = server.accept()
     print(f"Accepted connection from {addr}")
+    
+
+    client_files = threading.Thread(target=send_files, args=(client,))
+    client_files.start()
+    client_files.join()
 
     thread = 0
     try:

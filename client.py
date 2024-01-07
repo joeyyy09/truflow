@@ -1,5 +1,6 @@
 import socket
 import sys
+import threading
 # Function to receive messages from the friend
 def receive_messages(client_socket):
     try:
@@ -25,6 +26,14 @@ def send_messages(client_socket):
         print("\nConnection closed.")
         sys.exit()
 
+def receive_files(server_socket):
+    file_name = input(str("enter the name of the file: "))
+    file = open(file_name,"wb")
+    file_data = server_socket.recv(1024)
+    file.write(file_data)
+    file.close()
+    print("data has been received successfully")
+
 # Function to start the client and establish a connection with the friend
 def start_client():
     # Create a socket object for the client
@@ -35,6 +44,10 @@ def start_client():
 
     # Connect to the friend's IP and port
     client.connect((friend_ip, friend_port))
+
+    receive_file_thread = threading.Thread(target=receive_files, args=(client,))
+    receive_file_thread.start()
+    receive_file_thread.join()
 
     thread = 1
     try:
