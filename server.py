@@ -22,7 +22,6 @@ def receive_messages(client_socket):
         print("\nConnection closed.")
         sys.exit()
 
-
 def send_messages(client_socket):
     try:
         message = input("You: ")
@@ -34,10 +33,10 @@ def send_messages(client_socket):
 def send_files(client_socket):
     # first send the file name and size 
     file_name = input("enter the file name to be sent: ")
-    file_size = str(os.path.getsize(file_name)) + '\n'
+    file_size = str(os.path.getsize(file_name))
 
-    client_socket.send(file_name.encode())
-    client_socket.send(file_size.encode())
+    client_socket.send(file_name.ljust(1024,'\x00').encode())
+    client_socket.send(file_size.ljust(8,'\x00').encode())
     
     # send the file completely
     with open(file_name,"rb") as file:
@@ -46,16 +45,9 @@ def send_files(client_socket):
     print("Data has been sent successfully")
 
 def receive_files(server_socket):
-    file_name = server_socket.recv(1024).decode()
-    #file size is decoded 
-    file_size_bytes = b""
-    while True:
-        size_chunk = server_socket.recv(1)
-        if size_chunk == b"\n":
-            break
-        file_size_bytes += size_chunk
-    file_size = int(file_size_bytes.decode())
-
+    file_name = server_socket.recv(1024).decode().rstrip('\x00')
+    file_size = int(server_socket.recv(8).decode().rstrip('\x00'))
+   
     # data is received in chunks and writes in the file
     received_data = b""
     while len(received_data) < file_size:
@@ -71,7 +63,6 @@ def receive_files(server_socket):
         file.write(received_data)
 
     print("Data has been received successfully")
-
 
 # Function to start the server
 def start_server():
