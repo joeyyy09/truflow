@@ -109,8 +109,8 @@ def start_client():
 def chat(client_socket):
     try:
         while True:
-            receive_messages(client_socket)
             send_messages(client_socket)
+            receive_messages(client_socket)
     except (socket.error, KeyboardInterrupt):
         print("\nConnection closed.")
 
