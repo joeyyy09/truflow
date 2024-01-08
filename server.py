@@ -1,9 +1,10 @@
 import socket
 import sys
 import os
+import threading
 
 SERVER_IP = "0.0.0.0"
-PORT = 6666
+PORT = 5555
 
 # Function to receive messages from the friend
 def receive_messages(client_socket):
@@ -44,6 +45,33 @@ def send_files(client_socket):
             client_socket.sendall(sendfile)
     print("Data has been sent successfully")
 
+def receive_files(server_socket):
+    file_name = server_socket.recv(1024).decode()
+    #file size is decoded 
+    file_size_bytes = b""
+    while True:
+        size_chunk = server_socket.recv(1)
+        if size_chunk == b"\n":
+            break
+        file_size_bytes += size_chunk
+    file_size = int(file_size_bytes.decode())
+
+    # data is received in chunks and writes in the file
+    received_data = b""
+    while len(received_data) < file_size:
+        chunk = server_socket.recv(4096)
+        if not chunk:
+            break
+        received_data += chunk
+
+    # creates a recv directory if not exists
+    os.makedirs('recv', exist_ok=True)
+
+    with open(f'recv/{file_name}', 'wb') as file:
+        file.write(received_data)
+
+    print("Data has been received successfully")
+
 
 # Function to start the server
 def start_server():
@@ -61,21 +89,38 @@ def start_server():
     client, addr = server.accept()
     print(f"Accepted connection from {addr}")
     
-    send_files(client)
+    while True:
+        print("\nChoose an option:")
+        print("1. Send a file")
+        print("2. Receive a file")
+        print("3. Chat")
+        print("4. Exit")
 
-    thread = 1
+        choice = input("Enter your choice (1/2/3/4): ")
+
+        if choice == "1":
+            send_files(client)
+        elif choice == "2":
+            receive_files(client)
+        elif choice == "3":
+            chat_thread = threading.Thread(target=chat, args=(client,))
+            chat_thread.start()
+            chat_thread.join()
+        elif choice == "4":
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice. Please enter a valid option.")
+
+    server.close()
+
+def chat(client_socket):
     try:
         while True:
-            if thread == 1:
-                send_messages(client)
-                thread = 0
-            else:
-                receive_messages(client) 
-                thread = 1
-    except KeyboardInterrupt:
-        print("\nExiting...")
-    finally:
-        server.close()
+            receive_messages(client_socket)
+            send_messages(client_socket)
+    except (socket.error, KeyboardInterrupt):
+        print("\nConnection closed.")
 
 if __name__ == "__main__":
     start_server()
