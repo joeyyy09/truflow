@@ -1,10 +1,9 @@
 import socket
-import sys
 import os
-import threading
 
 SERVER_IP = "0.0.0.0"
 PORT = 5555
+all_clients: list[socket.socket] = []
 
 # Function to receive messages from the friend
 def receive_messages(client_socket):
@@ -14,21 +13,23 @@ def receive_messages(client_socket):
         # Check if data is empty, indicating the client has closed the connection
         if not data:
             print("\nConnection closed.")
-            sys.exit()
+            return 0
  
         # Display the received message from the client
         print(f"Friend: {data}")
+        return 1
     except (socket.error, KeyboardInterrupt):
         print("\nConnection closed.")
-        sys.exit()
+        return 0
 
 def send_messages(client_socket):
     try:
         message = input("You: ")
         client_socket.send(message.encode('utf-8'))
+        return 1
     except (socket.error, KeyboardInterrupt):
         print("\nConnection closed.")
-        sys.exit()
+        return 0
 
 def send_files(client_socket):
     try:
@@ -53,7 +54,6 @@ def send_files(client_socket):
 
     except Exception as e:
         print(f"Error sending file: {e}")
-
 
 def receive_files(server_socket):
     try:
@@ -80,54 +80,62 @@ def receive_files(server_socket):
     except Exception as e:
         print(f"Error receiving file: {e}")
 
+def chat(client_socket):
+    while True:
+        r = receive_messages(client_socket)
+        s = send_messages(client_socket)
+        if r == 0 or s == 0: return
+
+def accept_connections(server: socket.socket):
+    while len(all_clients) < 2:
+         # Accept a client connection
+        client, addr = server.accept()
+        print(f"Accepted connection from {addr}")
+        all_clients.append(client)
+
 # Function to start the server
 def start_server():
-    # Create a socket object for the server
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    
-    # Bind the server to the specified IP and port
-    server.bind((SERVER_IP, PORT))
-    
-    server.listen(1)
-    
-    print(f"Server listening on port {PORT}")
+        # Create a socket object for the server
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        
+        # Bind the server to the specified IP and port
+        server.bind((SERVER_IP, PORT))
+        
+        server.listen(5)
+        
+        print(f"Server listening on port {PORT}")
 
-    # Accept a client connection
-    client, addr = server.accept()
-    print(f"Accepted connection from {addr}")
-    
-    while True:
-        print("\nChoose an option:")
-        print("1. Send a file")
-        print("2. Receive a file")
-        print("3. Chat")
-        print("4. Exit")
+        accept_connections(server)
 
-        choice = input("Enter your choice (1/2/3/4): ")
-
-        if choice == "1":
-            send_files(client)
-        elif choice == "2":
-            receive_files(client)
-        elif choice == "3":
-            chat_thread = threading.Thread(target=chat, args=(client,))
-            chat_thread.start()
-            chat_thread.join()
-        elif choice == "4":
-            print("Exiting...")
-            break
-        else:
-            print("Invalid choice. Please enter a valid option.")
-
-    server.close()
-
-def chat(client_socket):
-    try:
         while True:
-            receive_messages(client_socket)
-            send_messages(client_socket)
-    except (socket.error, KeyboardInterrupt):
-        print("\nConnection closed.")
+            client_choice = int(input(f"Enter a number below {len(all_clients)} "))
+            if(client_choice >= len(all_clients)):
+                print('\nError: Invalid choice')
+                break
+                
+            while True:
+                print("\nChoose an option:")
+                print("1. Send a file")
+                print("2. Receive a file")
+                print("3. Chat")
+                print("4. Exit")
+
+                choice = input("Enter your choice (1/2/3/4): ")
+
+                if choice == "1":
+                    send_files(all_clients[client_choice])
+                elif choice == "2":
+                    receive_files(all_clients[client_choice])
+                elif choice == "3":
+                    chat(all_clients[client_choice])
+                elif choice == "4":
+                    print("Exiting...")
+                    break
+                else:
+                    print("Invalid choice. Please enter a valid option.")
+
+        server.close()
+
 
 if __name__ == "__main__":
     start_server()
