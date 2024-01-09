@@ -1,7 +1,5 @@
 import socket
-import sys
 import os
-import threading
 
 # Function to receive messages from the friend
 def receive_messages(client_socket):
@@ -11,23 +9,24 @@ def receive_messages(client_socket):
         # Check if data is empty, indicating the client has closed the connection
         if not data:
             print("\nConnection closed.")
-            sys.exit()
+            return 0
  
         # Display the received message from the client
         print(f"Friend: {data}")
+        return 1
     except (socket.error, KeyboardInterrupt):
         print("\nConnection closed.")
-        sys.exit()
-
+        return 0
 
 def send_messages(client_socket):
     try:
         message = input("You: ")
         client_socket.send(message.encode('utf-8'))
+        return 1
     except (socket.error, KeyboardInterrupt):
         print("\nConnection closed.")
-        sys.exit()
-
+        return 0
+    
 def send_files(client_socket):
     try:
         file_name = input("enter the file name to be sent: ")
@@ -77,6 +76,12 @@ def receive_files(server_socket):
 
     except Exception as e:
         print(f"Error receiving file: {e}")
+
+def chat(client_socket):
+    while True:
+        r = receive_messages(client_socket)
+        s = send_messages(client_socket)
+        if r == 0 or s == 0: return
         
 # Function to start the client and establish a connection with the friend
 def start_client():
@@ -103,9 +108,7 @@ def start_client():
         elif choice == "2":
             receive_files(client)
         elif choice == "3":
-            chat_thread = threading.Thread(target=chat, args=(client,))
-            chat_thread.start()
-            chat_thread.join()
+            chat(client)
         elif choice == "4":
             print("Exiting...")
             break
@@ -113,16 +116,6 @@ def start_client():
             print("Invalid choice. Please enter a valid option.")
 
     client.close()
-
-def chat(client_socket):
-    try:
-        while True:
-            send_messages(client_socket)
-            receive_messages(client_socket)
-    except (socket.error, KeyboardInterrupt):
-        print("\nConnection closed.")
-
-
  
 if __name__ == "__main__":
     start_client()
