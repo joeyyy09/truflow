@@ -143,6 +143,7 @@ def start_server():
                     chat(all_clients[client_choice])
                 elif choice == "4":
                     print("Exiting...")
+                    update_status(all_clients[client_choice], "Offline")
                     break
                 else:
                     print("Invalid choice. Please enter a valid option.")
