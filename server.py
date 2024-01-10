@@ -4,6 +4,8 @@ import os
 SERVER_IP = "0.0.0.0"
 PORT = 5555
 all_clients: list[socket.socket] = []
+# Dictionary to store the status of each client
+client_status = {}
 
 # Function to receive messages from the friend
 def receive_messages(client_socket):
@@ -86,12 +88,18 @@ def chat(client_socket):
         s = send_messages(client_socket)
         if r == 0 or s == 0: return
 
+# function to update client status
+def update_status(client_socket, status):
+    client_status[client_socket] = status
+
 def accept_connections(server: socket.socket):
     while len(all_clients) < 2:
          # Accept a client connection
         client, addr = server.accept()
         print(f"Accepted connection from {addr}")
         all_clients.append(client)
+        update_status(client, "Online")
+
 
 # Function to start the server
 def start_server():
@@ -108,6 +116,11 @@ def start_server():
         accept_connections(server)
 
         while True:
+            # Display the status of each connected client
+            print("\nConnected Clients:")
+            for i, client in enumerate(all_clients):
+                status = client_status.get(client, "Unknown")
+                print(f"{i}. Status: {status}")
             client_choice = int(input(f"Enter a number below {len(all_clients)} "))
             if(client_choice >= len(all_clients)):
                 print('\nError: Invalid choice')
