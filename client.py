@@ -79,8 +79,8 @@ def receive_files(server_socket):
 
 def chat(client_socket):
     while True:
-        r = receive_messages(client_socket)
         s = send_messages(client_socket)
+        r = receive_messages(client_socket)
         if r == 0 or s == 0: return
         
 # Function to start the client and establish a connection with the friend
