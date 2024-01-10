@@ -8,6 +8,8 @@ BUFFER_SIZE = 1024
 FILE_NAME_SIZE = 1024
 FILE_SIZE_SIZE = 8
 CHUNK_SIZE = 4096
+# Dictionary to store the status of each client
+client_status = {}
 
 # It shows the messages received from the socket i.e, 
 # client_socket which is passed as a function parameter 
@@ -92,6 +94,10 @@ def chat(client_socket: socket.socket):
         s = send_messages(client_socket)
         if r == 0 or s == 0: return
 
+# Function to update client status
+def update_status(client_socket, status):
+    client_status[client_socket] = status
+
 # Accepts connections with the client and appends socket to all_clients list
 def accept_connections(server: socket.socket):
     while len(all_clients) < 2:
@@ -99,6 +105,7 @@ def accept_connections(server: socket.socket):
         client, addr = server.accept()
         print(f"Accepted connection from {addr}")
         all_clients.append(client)
+        update_status(client, "Online")
 
 def start_server():
         # Create a socket object for the server
@@ -115,6 +122,12 @@ def start_server():
         accept_connections(server)
 
         while True:
+        # Display the status of each connected client
+            print("\nConnected Clients:")
+            for i, client in enumerate(all_clients):
+                status = client_status.get(client, "Unknown")
+                print(f"{i}. Status: {status}")
+
             client_choice = int(input(f"Enter a number below {len(all_clients)} "))
             if(client_choice >= len(all_clients)):
                 print('\nError: Invalid choice')
@@ -137,6 +150,7 @@ def start_server():
                     chat(all_clients[client_choice])
                 elif choice == "4":
                     print("Exiting...")
+                    update_status(all_clients[client_choice], "Offline")
                     break
                 else:
                     print("Invalid choice. Please enter a valid option.")
