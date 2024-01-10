@@ -5,16 +5,12 @@ SERVER_IP = "0.0.0.0"
 PORT = 5555
 all_clients: list[socket.socket] = []
 
-# Function to receive messages from the friend
-def receive_messages(client_socket):
+# It shows the messages received from the socket i.e, 
+# client_socket which is passed as a function parameter 
+def receive_messages(client_socket: socket.socket) -> int:
     try:
-        data = client_socket.recv(1024).decode('utf-8')
+        data: str = client_socket.recv(1024).decode('utf-8')
             
-        # Check if data is empty, indicating the client has closed the connection
-        if not data:
-            print("\nConnection closed.")
-            return 0
- 
         # Display the received message from the client
         print(f"Friend: {data}")
         return 1
@@ -22,7 +18,9 @@ def receive_messages(client_socket):
         print("\nConnection closed.")
         return 0
 
-def send_messages(client_socket):
+# It sends messages to the socket i.e, client_socket 
+# which is passed as a function parameter 
+def send_messages(client_socket: socket.socket) -> int:
     try:
         message = input("You: ")
         client_socket.send(message.encode('utf-8'))
@@ -31,7 +29,9 @@ def send_messages(client_socket):
         print("\nConnection closed.")
         return 0
 
-def send_files(client_socket):
+# It sends the files to the socket i.e, 
+# client_socket which is passed as a function parameter 
+def send_files(client_socket: socket.socket):
     try:
         file_name = input("enter the file name to be sent: ")
 
@@ -55,16 +55,18 @@ def send_files(client_socket):
     except Exception as e:
         print(f"Error sending file: {e}")
 
-def receive_files(server_socket):
+# It receives files from the socket i.e, 
+# client_socket which is passed as a function parameter 
+def receive_files(client_socket: socket.socket):
     try:
          # Trim the null values and decode the file name and file size
-        file_name = server_socket.recv(1024).decode().rstrip('\x00')
-        file_size = int(server_socket.recv(8).decode().rstrip('\x00'))
+        file_name: str = client_socket.recv(1024).decode().rstrip('\x00')
+        file_size = int(client_socket.recv(8).decode().rstrip('\x00'))
 
         # data is received in chunks and writes in the file
         received_data = b""
         while len(received_data) < file_size:
-            chunk = server_socket.recv(4096)
+            chunk = client_socket.recv(4096)
             if not chunk:
                 break
             received_data += chunk
@@ -80,12 +82,13 @@ def receive_files(server_socket):
     except Exception as e:
         print(f"Error receiving file: {e}")
 
-def chat(client_socket):
+def chat(client_socket: socket.socket):
     while True:
         r = receive_messages(client_socket)
         s = send_messages(client_socket)
         if r == 0 or s == 0: return
 
+# Accepts connections with the client and appends socket to all_clients list
 def accept_connections(server: socket.socket):
     while len(all_clients) < 2:
          # Accept a client connection
@@ -93,7 +96,6 @@ def accept_connections(server: socket.socket):
         print(f"Accepted connection from {addr}")
         all_clients.append(client)
 
-# Function to start the server
 def start_server():
         # Create a socket object for the server
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -101,6 +103,7 @@ def start_server():
         # Bind the server to the specified IP and port
         server.bind((SERVER_IP, PORT))
         
+        # Maximum connects upto 5 clients
         server.listen(5)
         
         print(f"Server listening on port {PORT}")
