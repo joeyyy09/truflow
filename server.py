@@ -4,12 +4,16 @@ import os
 SERVER_IP = "0.0.0.0"
 PORT = 5555
 all_clients: list[socket.socket] = []
+BUFFER_SIZE = 1024
+FILE_NAME_SIZE = 1024
+FILE_SIZE_SIZE = 8
+CHUNK_SIZE = 4096
 
 # It shows the messages received from the socket i.e, 
 # client_socket which is passed as a function parameter 
 def receive_messages(client_socket: socket.socket) -> int:
     try:
-        data: str = client_socket.recv(1024).decode('utf-8')
+        data: str = client_socket.recv(BUFFER_SIZE).decode('utf-8')
             
         # Display the received message from the client
         print(f"Friend: {data}")
@@ -43,8 +47,8 @@ def send_files(client_socket: socket.socket):
         file_size = str(os.path.getsize(file_name))
 
         # file name and file size are padded with null values for fixed length
-        client_socket.send(file_name.ljust(1024,'\x00').encode())
-        client_socket.send(file_size.ljust(8,'\x00').encode())
+        client_socket.send(file_name.ljust(FILE_NAME_SIZE,'\x00').encode())
+        client_socket.send(file_size.ljust(FILE_SIZE_SIZE,'\x00').encode())
 
         # send the file completely
         with open(file_name,"rb") as file:
@@ -60,13 +64,13 @@ def send_files(client_socket: socket.socket):
 def receive_files(client_socket: socket.socket):
     try:
          # Trim the null values and decode the file name and file size
-        file_name: str = client_socket.recv(1024).decode().rstrip('\x00')
-        file_size = int(client_socket.recv(8).decode().rstrip('\x00'))
+        file_name: str = client_socket.recv(FILE_NAME_SIZE).decode().rstrip('\x00')
+        file_size = int(client_socket.recv(FILE_SIZE_SIZE).decode().rstrip('\x00'))
 
         # data is received in chunks and writes in the file
         received_data = b""
         while len(received_data) < file_size:
-            chunk = client_socket.recv(4096)
+            chunk = client_socket.recv(CHUNK_SIZE)
             if not chunk:
                 break
             received_data += chunk
