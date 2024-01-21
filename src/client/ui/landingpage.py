@@ -13,9 +13,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
+        MainWindow.setObjectName("TrueFlow")
         MainWindow.resize(404, 349)
-        MainWindow.setStyleSheet("background-color:rgb( 36,41,46);")
+        MainWindow.setStyleSheet("background-color:rgb(12, 4, 4);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
@@ -32,7 +32,7 @@ class Ui_MainWindow(object):
         font.setPointSize(8)
         self.pushButton.setFont(font)
         self.pushButton.setStyleSheet("color:rgb(255, 255, 255);\n"
-"border:2px solid white;")
+"border:1px solid white;")
         self.pushButton.setObjectName("pushButton")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(40, 120, 161, 31))
@@ -53,7 +53,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "TrueFlow"))
         
         self.pushButton.setText(_translate("MainWindow", "Continue"))
         self.label.setText(_translate("MainWindow", "TruFlow"))
