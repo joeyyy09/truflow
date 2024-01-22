@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'untitled.ui'
+# Form implementation generated from reading ui file 'basicdetails.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -14,45 +14,27 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(404, 319)
-        MainWindow.setStyleSheet("background-color:rgb(12, 4, 4)")
+        MainWindow.resize(484, 403)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(60, 60, 291, 140))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.gridLayout = QtWidgets.QGridLayout(self.layoutWidget)
-        self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout.setObjectName("gridLayout")
-        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
-        self.label_2.setStyleSheet("color:rgb(255,255,255)")
-        self.label_2.setObjectName("label_2")
-        
-        self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1)
-        self.pushButton = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton.setStyleSheet("color:rgb(255,255,255);\n"
-"border:0.5px solid white")
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(300, 200, 93, 28))
         self.pushButton.setObjectName("pushButton")
-        self.gridLayout.addWidget(self.pushButton, 3, 1, 1, 1)
-        self.lineEdit_2 = QtWidgets.QLineEdit(self.layoutWidget)
-        self.lineEdit_2.setStyleSheet("color:rgb(255, 255, 255)")
-        self.lineEdit_2.setPlaceholderText("Enter Server IP")
-        self.lineEdit_2.setObjectName("lineEdit_2")
-        self.gridLayout.addWidget(self.lineEdit_2, 3, 0, 1, 1)
-        self.pushButton_2 = QtWidgets.QPushButton(self.layoutWidget)
-        self.pushButton_2.setStyleSheet("color:rgb(255,255,255);\n"
-"border:1px solid white")
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(100, 250, 291, 28))
         self.pushButton_2.setObjectName("pushButton_2")
-        self.gridLayout.addWidget(self.pushButton_2, 4, 0, 1, 2)
-        self.label = QtWidgets.QLabel(self.layoutWidget)
-        self.label.setStyleSheet("color:rgb(255,255,255)")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(100, 100, 55, 16))
         self.label.setObjectName("label")
-        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
-        self.lineEdit = QtWidgets.QLineEdit(self.layoutWidget)
-        self.lineEdit.setStyleSheet("color:rgb(255, 255, 255)")
-        self.lineEdit.setPlaceholderText("Enter Share Folder Path")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(100, 170, 121, 16))
+        self.label_2.setObjectName("label_2")
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setGeometry(QtCore.QRect(100, 130, 291, 28))
         self.lineEdit.setObjectName("lineEdit")
-        self.gridLayout.addWidget(self.lineEdit, 1, 0, 1, 2)
+        self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_2.setGeometry(QtCore.QRect(100, 200, 191, 28))
+        self.lineEdit_2.setObjectName("lineEdit_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -63,11 +45,11 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "hu"))
-        self.label_2.setText(_translate("MainWindow", "Share Folder Path"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Basic Details"))
         self.pushButton.setText(_translate("MainWindow", "Open"))
         self.pushButton_2.setText(_translate("MainWindow", "Continue"))
         self.label.setText(_translate("MainWindow", "Server IP"))
+        self.label_2.setText(_translate("MainWindow", "Share Folder Path"))
 
 
 if __name__ == "__main__":
