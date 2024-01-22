@@ -6,17 +6,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
+<<<<<<< Updated upstream
     <width>992</width>
     <height>701</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>TruFlow</string>
+=======
+    <width>404</width>
+    <height>319</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Basic Details</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:rgb(12, 4, 4)</string>
+>>>>>>> Stashed changes
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
+<<<<<<< Updated upstream
       <x>20</x>
       <y>0</y>
       <width>641</width>
@@ -30,11 +43,25 @@
     </property>
     <property name="text">
      <string>Welcome to TruFlow, Harshith!</string>
+=======
+      <x>61</x>
+      <y>62</y>
+      <width>53</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(255,255,255)</string>
+    </property>
+    <property name="text">
+     <string>Server IP</string>
+>>>>>>> Stashed changes
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
+<<<<<<< Updated upstream
       <x>540</x>
       <y>30</y>
       <width>101</width>
@@ -82,11 +109,26 @@
     </property>
     <property name="text">
      <string>Settings</string>
+=======
+      <x>210</x>
+      <y>137</y>
+      <width>71</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(255,255,255);
+border:0.5px solid white</string>
+    </property>
+    <property name="text">
+     <string>Open</string>
+>>>>>>> Stashed changes
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
+<<<<<<< Updated upstream
       <x>20</x>
       <y>80</y>
       <width>101</width>
@@ -208,6 +250,62 @@
     </property>
     <property name="text">
      <string>Send Message</string>
+=======
+      <x>61</x>
+      <y>114</y>
+      <width>103</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(255,255,255)</string>
+    </property>
+    <property name="text">
+     <string>Share Folder Path</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>61</x>
+      <y>180</y>
+      <width>221</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(255,255,255);
+border:1px solid white</string>
+    </property>
+    <property name="text">
+     <string>Continue</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_2">
+    <property name="geometry">
+     <rect>
+      <x>61</x>
+      <y>137</y>
+      <width>137</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border:1px solid white</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>61</x>
+      <y>85</y>
+      <width>137</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid white</string>
+>>>>>>> Stashed changes
     </property>
    </widget>
   </widget>
