@@ -10,8 +10,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import mainpage
 
-class Ui_MainWindow(object):
+class Ui_BasicDetailsWindow(object):
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(484, 403)
@@ -23,6 +25,9 @@ class Ui_MainWindow(object):
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(100, 250, 291, 28))
         self.pushButton_2.setObjectName("pushButton_2")
+
+        self.pushButton_2.clicked.connect(lambda: self.basicDetails_On_Continue(MainWindow))
+
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(100, 100, 55, 16))
         self.label.setObjectName("label")
@@ -51,12 +56,12 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "Server IP"))
         self.label_2.setText(_translate("MainWindow", "Share Folder Path"))
 
+    def basicDetails_On_Continue(self, MainWindow):
+        print(self.lineEdit.text()) #ToDo: To store username and move to next 
+        print(self.lineEdit_2.text()) #ToDo: To store username and move to next 
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+        self.window = QtWidgets.QMainWindow()
+        self.ui = mainpage.Ui_MainPageWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+        MainWindow.close()

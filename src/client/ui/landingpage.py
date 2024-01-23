@@ -10,6 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import basicdetails
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -34,6 +36,9 @@ class Ui_MainWindow(object):
         self.pushButton.setStyleSheet("color:rgb(255, 255, 255);\n"
 "border:1px solid white;")
         self.pushButton.setObjectName("pushButton")
+
+        self.pushButton.clicked.connect(lambda: self.username_On_Continue(MainWindow))
+
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(40, 120, 161, 31))
         font = QtGui.QFont()
@@ -58,6 +63,13 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "Continue"))
         self.label.setText(_translate("MainWindow", "TruFlow"))
 
+    def username_On_Continue(self, MainWindow):
+        print(self.lineEdit.text()) #ToDo: To store username and move to next 
+        self.window = QtWidgets.QMainWindow()
+        self.ui = basicdetails.Ui_BasicDetailsWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+        MainWindow.close()
 
 if __name__ == "__main__":
     import sys
