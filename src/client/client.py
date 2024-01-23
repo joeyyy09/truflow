@@ -1,4 +1,4 @@
-git import socket
+import socket
 import os
 
 BUFFER_SIZE = 1024
