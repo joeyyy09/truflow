@@ -10,6 +10,15 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+# Appending parent sibling directories (packages) to import them
+import pathlib
+import sys
+
+parent_directory_src = str(pathlib.Path(__file__).parent.resolve().parents[1])
+sys.path.append(parent_directory_src)
+sys.path.append(parent_directory_src+"/server")
+
+
 import mainpage
 
 class Ui_BasicDetailsWindow(object):
