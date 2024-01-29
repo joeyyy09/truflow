@@ -1,5 +1,8 @@
 import socket
 import os
+import json
+import threading
+import time
 
 BUFFER_SIZE = 1024
 FILE_NAME_SIZE = 1024
@@ -83,6 +86,29 @@ def receive_files(client_socket: socket.socket):
     except Exception as e:
         print(f"Error receiving file: {e}")
 
+def view_shared_files(client_socket: socket.socket, shared_folder: str):
+    try:
+        client_socket.send("5".encode('utf-8'))  # Send option 5 to request shared files list
+        shared_files_list = json.loads(client_socket.recv(BUFFER_SIZE).decode('utf-8'))
+        print(f"Shared Files in {shared_folder}: {shared_files_list}")
+
+    except Exception as e:
+        print(f"Error viewing shared files: {e}")
+
+# Add a function to continuously share files from the specified folder
+def share_all_files(client_socket: socket.socket, shared_folder: str):
+    try:
+        while True:
+            for file_name in os.listdir(shared_folder):
+                file_path = os.path.join(shared_folder, file_name)
+
+                if os.path.isfile(file_path):
+                    send_files(client_socket, file_path)
+                time.sleep(1)  #  Adjust the sleep time between file sharing
+    except KeyboardInterrupt:
+        pass
+
+
 def chat(client_socket: socket.socket):
     while True:
         s = send_messages(client_socket)
@@ -95,18 +121,29 @@ def start_client():
 
     friend_ip = input("Enter friend's IP address: ")
     friend_port = int(input("Enter friend's port: "))
+    shared_folder = input("Enter the path of the folder you want to share: ")
+
+
+    if not os.path.exists(shared_folder):
+        print(f"Error: Shared folder '{shared_folder}' does not exist.")
+        return
+
 
     # Connect to the friend's IP and port
     client.connect((friend_ip, friend_port))
+    # Start a thread to continuously share files from the specified folder
+    share_thread = threading.Thread(target=share_all_files, args=(client, shared_folder), daemon=True)
+    share_thread.start()
 
     while True:
         print("\nChoose an option:")
         print("1. Send a file")
         print("2. Receive a file")
         print("3. Chat")
-        print("4. Exit")
+        print("4. View Shared Files")
+        print("5. Exit")
 
-        choice = input("Enter your choice (1/2/3/4): ")
+        choice = input("Enter your choice (1/2/3/4/5): ")
 
         if choice == "1":
             send_files(client)
@@ -115,6 +152,8 @@ def start_client():
         elif choice == "3":
             chat(client)
         elif choice == "4":
+            view_shared_files(client, shared_folder)
+        elif choice == "5":
             print("Exiting...")
             break
         else:
