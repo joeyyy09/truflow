@@ -1,5 +1,8 @@
 import socket
 import os
+import json
+import threading
+import time
 
 SERVER_IP = "0.0.0.0"
 PORT = 5555
@@ -10,6 +13,7 @@ FILE_SIZE_SIZE = 8
 CHUNK_SIZE = 4096
 # Dictionary to store the status of each client
 client_status = {}
+shared_files = {}
 
 # It shows the messages received from the socket i.e, 
 # client_socket which is passed as a function parameter 
@@ -88,6 +92,26 @@ def receive_files(client_socket: socket.socket):
     except Exception as e:
         print(f"Error receiving file: {e}")
 
+# Function to get the list of shared files from all connected clients
+def get_shared_files_list():
+    shared_files_list = []
+    for client_socket in shared_files:
+        shared_files_list.extend(shared_files[client_socket])
+    return list(set(shared_files_list))  # Remove duplicates using set
+
+def handle_shared_files_request(client_socket):
+    try:
+        while True:
+            shared_file_list = get_shared_files_list()
+            client_socket.send(json.dumps(shared_file_list).encode('utf-8'))
+            time.sleep(1)  # Optional: Adjust the sleep time between sending shared files list
+    except (socket.error, OSError):
+        pass
+
+def update_shared_files(client_socket, shared_file_list):
+    shared_files[client_socket] = shared_file_list
+       
+
 def chat(client_socket: socket.socket):
     while True:
         r = receive_messages(client_socket)
@@ -121,6 +145,10 @@ def start_server():
 
         accept_connections(server)
 
+        # Start a thread to continuously handle shared files request from clients
+        share_thread = threading.Thread(target=handle_shared_files_request, args=(all_clients[client_choice],), daemon=True)
+        share_thread.start()
+
         while True:
         # Display the status of each connected client
             print("\nConnected Clients:")
@@ -138,9 +166,10 @@ def start_server():
                 print("1. Send a file")
                 print("2. Receive a file")
                 print("3. Chat")
-                print("4. Exit")
+                print("4. View Shared Files")
+                print("5. Exit")
 
-                choice = input("Enter your choice (1/2/3/4): ")
+                choice = input("Enter your choice (1/2/3/4/5): ")
 
                 if choice == "1":
                     send_files(all_clients[client_choice])
@@ -149,6 +178,8 @@ def start_server():
                 elif choice == "3":
                     chat(all_clients[client_choice])
                 elif choice == "4":
+                    handle_shared_files_request(all_clients[client_choice])
+                elif choice == "5":
                     print("Exiting...")
                     update_status(all_clients[client_choice], "Offline")
                     break
