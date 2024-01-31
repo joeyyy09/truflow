@@ -21,7 +21,7 @@ sys.path.append(parent_directory_src+"/server")
 import basicdetails
 
 from server.server import dummyFunction
-from client.client import dummyFunction2
+from src.client.client1 import dummyFunction2
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):

@@ -17,23 +17,23 @@ client_sockets = {}
 
 def start_server():
     # Create a socket object for the server
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     # Configuring the socket to reuse addresses and immediately transmit data
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 
     # Bind the server to the specified IP and port
-    server.bind((SERVER_IP, SERVER_PORT))
+    server_socket.bind((SERVER_IP, SERVER_PORT))
 
     # Maximum connects up to 5 clients
-    server.listen(5)
+    server_socket.listen(5)
 
     print(f"Server listening on port {SERVER_PORT}")
 
     while True:
         # Accept a client connection
-        client, addr = server.accept()
+        client, addr = server_socket.accept()
         print(f"Accepted connection from {addr}")
 
         # Add the client socket to the dictionary
