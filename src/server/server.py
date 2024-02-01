@@ -49,7 +49,7 @@ def establishing_connection(client_socket: socket.socket):
 
     client_name = client_socket.recv(BUFFER_SIZE).decode('utf-8')
     address = all_clients[client_name]
-    client.send(address.encode('utf-8'))
+    client_socket.send(address.encode('utf-8'))
 
 def start_server2():
     # Server socket for sending who is online to the client
