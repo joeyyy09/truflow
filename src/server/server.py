@@ -45,6 +45,12 @@ def start_server():
         # Add the client socket to the dictionary
         all_clients[client_name] = client
 
+def establishing_connection(client_socket: socket.socket):
+
+    client_name = client_socket.recv(BUFFER_SIZE).decode('utf-8')
+    address = all_clients[client_name]
+    client.send(address.encode('utf-8'))
+
 def start_server2():
     # Server socket for sending who is online to the client
     server_socket2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

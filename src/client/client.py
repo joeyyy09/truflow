@@ -16,6 +16,16 @@ online_users = {}
 
 client_details = {}
 
+def connection_for_chat(client_socket: socket.socket):
+    message = input("Enter the name of the user: ")
+    client_socket.send(message.encode('utf-8'))
+    data = client_socket.recv(BUFFER_SIZE).decode('utf-8')
+    print(f"received address: {data}")
+    chat_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    ip_address, port_number = data.split(":")
+    chat_socket.connect((ip_address, int(port_number)))
+
+
 def start_client() -> tuple[socket.socket,socket.socket]:
     try:
         # Client Socket for general communication with the server
