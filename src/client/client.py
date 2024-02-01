@@ -82,5 +82,6 @@ if __name__ == "__main__":
     if client and client2:
         heart_beat = threading.Thread(target=Heart_Beat_Function,args= (client2,), daemon=True)
         heart_beat.start()
+        heart_beat.join()
     else:
         print("Failed to start client. Exiting....")
