@@ -18,8 +18,10 @@ all_clients2 = {}
 # client for general communication between sevrer and client
 # client2 for online and heartbeat functionality
 def establishing_connection(client_socket: socket.socket):
-
+    
     client_name = client_socket.recv(BUFFER_SIZE).decode('utf-8')
+    if len(client_name)==0:
+        return
     host , port = all_clients[client_name].getsockname()
     data_to_send = f"{host},{port}"
     client_socket.send(data_to_send.encode('utf-8'))
@@ -53,9 +55,8 @@ def start_server():
         # Add the client socket to the dictionary
         all_clients[client_name] = client
         
-        if bool(all_clients[client_name]):
-
-            establishing_connection(client)
+        ip_thread = threading.Thread(target=establishing_connection, args=(client,))
+        ip_thread.start()
 
            
        

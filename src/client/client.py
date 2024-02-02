@@ -24,12 +24,10 @@ def starting_connection_for_chat(client_socket:socket.socket,chat_socket:socket.
     print(f"Host: {host}, Port: {port}")
     chat_socket.connect((host, int(port)))
 
-def receiving_connection_for_chat(client_socket:socket.socket):
-    host , port = client_socket.getsockname()
-    client_socket.bind((host, port))
-    client_socket.listen(5)
+def receiving_connection_for_chat(client_socket:socket.socket)->socket.socket:
     client, addr = client_socket.accept()
-    print(f"Connection Accepted from {host}, {port}")
+    print(f"Connection Accepted ")
+    return client_socket
 
 
 def send_messages(chat_socket: socket.socket) -> int:
@@ -89,8 +87,8 @@ def start_client() -> tuple[socket.socket,socket.socket]:
                 chat_socket.close()
 
             if choice == "2":
-                receiving_connection_for_chat(client2)
-                receive_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                
+                receive_socket = receiving_connection_for_chat(client)
                 receive_messages(receive_socket)
                 send_messages(receive_socket)
                 receive_socket.close()
