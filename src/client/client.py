@@ -16,15 +16,41 @@ online_users = {}
 
 client_details = {}
 
-def connection_for_chat(client_socket: socket.socket):
+def starting_connection_for_chat(client_socket:socket.socket,chat_socket:socket.socket):
     message = input("Enter the name of the user: ")
     client_socket.send(message.encode('utf-8'))
-    data = client_socket.recv(BUFFER_SIZE).decode('utf-8')
-    print(f"received address: {data}")
-    chat_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    ip_address, port_number = data.split(":")
-    chat_socket.connect((ip_address, int(port_number)))
+    received_data = client_socket.recv(BUFFER_SIZE).decode('utf-8')
+    host, port = received_data.split(',')
+    print(f"Host: {host}, Port: {port}")
+    chat_socket.connect((host, int(port)))
 
+def receiving_connection_for_chat(client_socket:socket.socket):
+    host , port = client_socket.getsockname()
+    client_socket.bind((host, port))
+    client_socket.listen(5)
+    client, addr = client_socket.accept()
+    print(f"Connection Accepted from {host}, {port}")
+
+
+def send_messages(chat_socket: socket.socket) -> int:
+    try:
+        message = input("You: ")
+        chat_socket.send(message.encode('utf-8'))
+        return 1
+    except (socket.error, KeyboardInterrupt):
+        print("\nConnection closed.")
+        return 0
+
+def receive_messages(chat_socket: socket.socket) -> int:
+    try:
+        data: str = chat_socket.recv(BUFFER_SIZE).decode('utf-8')
+            
+        # Display the received message from the client
+        print(f"Friend: {data}")
+        return 1
+    except (socket.error, KeyboardInterrupt):
+        print("\nConnection closed.")
+        return 0
 
 def start_client() -> tuple[socket.socket,socket.socket]:
     try:
@@ -47,6 +73,30 @@ def start_client() -> tuple[socket.socket,socket.socket]:
         client2.connect((server_ip, SERVER_PORT2))
         message = "I am "+client_details["name"]+" for online"
         client2.send(message.ljust(BUFFER_SIZE,'\x00').encode('utf-8'))
+
+        
+        
+        while True:
+
+            print(" Enter 1 to start a chat\n Enter 2 to receive a chat")
+            choice  = input("\nEnter your choice: ") 
+
+            if choice == "1":
+                chat_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                starting_connection_for_chat(client,chat_socket)
+                send_messages(chat_socket)
+                receive_messages(chat_socket)
+                chat_socket.close()
+
+            if choice == "2":
+                receiving_connection_for_chat(client2)
+                receive_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                receive_messages(receive_socket)
+                send_messages(receive_socket)
+                receive_socket.close()
+
+            else:
+                print("enter a valid option")
 
         return client, client2
 

@@ -17,6 +17,14 @@ all_clients= {}
 all_clients2 = {}
 # client for general communication between sevrer and client
 # client2 for online and heartbeat functionality
+def establishing_connection(client_socket: socket.socket):
+
+    client_name = client_socket.recv(BUFFER_SIZE).decode('utf-8')
+    host , port = all_clients[client_name].getsockname()
+    data_to_send = f"{host},{port}"
+    client_socket.send(data_to_send.encode('utf-8'))
+
+
 
 def start_server():
     # Create a socket object for the server
@@ -44,12 +52,16 @@ def start_server():
 
         # Add the client socket to the dictionary
         all_clients[client_name] = client
+        
+        if bool(all_clients[client_name]):
 
-def establishing_connection(client_socket: socket.socket):
+            establishing_connection(client)
 
-    client_name = client_socket.recv(BUFFER_SIZE).decode('utf-8')
-    address = all_clients[client_name]
-    client_socket.send(address.encode('utf-8'))
+           
+       
+       
+
+
 
 def start_server2():
     # Server socket for sending who is online to the client
@@ -73,6 +85,8 @@ def start_server2():
 
         # Add the client socket to the dictionary
         all_clients2[client_name] = client2
+   
+        
 
 def Heart_Beat_Function():
     global all_clients2
@@ -101,11 +115,12 @@ if __name__ == "__main__":
     server_thread = threading.Thread(target=start_server, daemon=True)
     server_thread2 = threading.Thread(target=start_server2, daemon=True)
     heart_beat = threading.Thread(target=Heart_Beat_Function, daemon=True)
-
+    
+        
     heart_beat.start()
     server_thread.start()
     server_thread2.start()
-
+    
     server_thread.join()
     server_thread2.join()
     heart_beat.join()
