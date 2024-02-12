@@ -3,6 +3,11 @@ import os
 import json
 import threading
 import time
+from typing import Dict, TypedDict
+
+class all_clients_InnerDict(TypedDict):
+    clientsocket: socket  
+    ipaddr: str  
 
 SERVER_IP = "0.0.0.0"
 SERVER_PORT = 5555
@@ -13,8 +18,8 @@ FILE_SIZE_SIZE = 8
 CHUNK_SIZE = 4096
 
 # Dictionary to store the status of each client
-all_clients= {}
-all_clients2 = {}
+all_clients: Dict[str,all_clients_InnerDict] = {}
+all_clients2: Dict[str,all_clients_InnerDict] = {}
 # client for general communication between sevrer and client
 # client2 for online and heartbeat functionality
 
@@ -43,13 +48,7 @@ def start_server():
         client_name = recv_message[5:-11]
 
         # Add the client socket to the dictionary
-        all_clients[client_name] = client
-
-def establishing_connection(client_socket: socket.socket):
-
-    client_name = client_socket.recv(BUFFER_SIZE).decode('utf-8')
-    address = all_clients[client_name]
-    client_socket.send(address.encode('utf-8'))
+        all_clients[client_name] = {'clientsocket': client, 'ipaddr': addr}
 
 def start_server2():
     # Server socket for sending who is online to the client
@@ -72,27 +71,30 @@ def start_server2():
         client_name = recv_message[5:-11]
 
         # Add the client socket to the dictionary
-        all_clients2[client_name] = client2
+        all_clients2[client_name] = {"clientsocket": client2, "ipaddr": addr}
 
 def Heart_Beat_Function():
     global all_clients2
     while True:
         # To store current online users
-        temp_dict = {}
+        temp_dict: Dict[str,all_clients_InnerDict] = {}
+        OnlineUsersDetails: Dict[str,str] = {}
+
         for client2 in all_clients2.values():
-            message = client2.recv(BUFFER_SIZE).decode().rstrip('\x00')
-            client_name = message[5:-11]
-            temp_dict[client_name] = client2
-        
+            message = client2['clientsocket'].recv(BUFFER_SIZE).decode().rstrip('\x00')
+            client_name: str = message[5:-11]
+            temp_dict[client_name] = {"clientsocket": client2['clientsocket'], "ipaddr": client2['ipaddr']}
+            OnlineUsersDetails[client_name] = client2['ipaddr']
+
         # update online users
         all_clients2 = temp_dict
 
-        serialized_data = json.dumps(list(all_clients2.keys()))
+        serialized_data = json.dumps(OnlineUsersDetails)
 
         for client2 in all_clients2.values():
-            client2.send(serialized_data.ljust(BUFFER_SIZE,'\x00').encode('utf-8'))
+            client2['clientsocket'].send(serialized_data.ljust(BUFFER_SIZE,'\x00').encode('utf-8'))
         
-        print(all_clients2.keys())
+        # print(all_clients2.keys())
 
         # Perform hearbeat at a rate of 10seconds
         time.sleep(10.0)
