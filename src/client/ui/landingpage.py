@@ -9,19 +9,13 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
-# Appending parent sibling directories (packages) to import them
 import pathlib
 import sys
+import basicdetails  # Importing basicdetails module
 
 parent_directory_src = str(pathlib.Path(__file__).parent.resolve().parents[1])
 sys.path.append(parent_directory_src)
 sys.path.append(parent_directory_src+"/server")
-
-import basicdetails
-
-from server.server import dummyFunction
-from src.client.client1 import dummyFunction2
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -75,11 +69,10 @@ class Ui_MainWindow(object):
 
     def username_On_Continue(self, MainWindow):
         print(self.lineEdit.text()) #ToDo: To store username and move to next 
-        dummyFunction2()
-        dummyFunction()
+        username = self.lineEdit.text()
         self.window = QtWidgets.QMainWindow()
         self.ui = basicdetails.Ui_BasicDetailsWindow()
-        self.ui.setupUi(self.window)
+        self.ui.setupUi(self.window,MainWindow)
         self.window.show()
         MainWindow.close()
 
@@ -91,3 +84,4 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
