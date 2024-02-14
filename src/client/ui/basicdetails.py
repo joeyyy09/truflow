@@ -9,14 +9,53 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QLineEdit
 import socket
 import pathlib
+import json
 import sys
 import mainpage  # Importing mainpage module
+
+# Constants for socket communication
+BUFFER_SIZE = 1024
+SERVER_PORT = 5555
+SERVER_PORT2 = 5556
+
+client_details = {}
 
 parent_directory_src = str(pathlib.Path(__file__).parent.resolve().parents[1])
 sys.path.append(parent_directory_src)
 sys.path.append(parent_directory_src+"/server")
+
+def save_username_and_server_ip(username: str, server_ip: str):
+    # Save the username and server IP for later use
+    client_details["name"] = username
+    client_details["server_ip"] = server_ip
+
+def establish_connection():
+    try:
+        your_name = client_details["name"]
+        server_ip = client_details["server_ip"]
+
+        # Client Socket for general communication with the server
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print("Connecting to server...")
+        client.connect((server_ip, SERVER_PORT))
+        message = "I am " + your_name + " for online"
+        client.send(message.ljust(BUFFER_SIZE, '\x00').encode('utf-8'))
+
+        # Client socket for receiving who is online from the server
+        client2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print("Connecting to server (2nd socket)...")
+        client2.connect((server_ip, SERVER_PORT2))
+        message = "I am " + your_name + " for online"
+        client2.send(message.ljust(BUFFER_SIZE, '\x00').encode('utf-8'))
+
+        return client, client2
+
+    except Exception as e:
+        print("Error in establish_connection function in basicDetails.py:", e)
+        return None, None
 
 class Ui_MainWindow(object):
 
@@ -62,7 +101,22 @@ class Ui_MainWindow(object):
 
     def basicDetails_On_Continue(self, MainWindow):
         print(self.lineEdit.text()) #ToDo: To store username and move to next 
+        server_ip = self.lineEdit.text()
+
         print(self.lineEdit_3.text()) #ToDo: To store username and move to next 
+        username = self.lineEdit_3.text()
+
+        # Store the username and server IP for later use
+        save_username_and_server_ip(username, server_ip)
+
+        # Establish the connection with the server
+        client, client2 = establish_connection()
+        if client and client2:
+          print("Connection established successfully")
+        else:
+          print("Failed to establish connection")
+
+
 
         self.window = QtWidgets.QMainWindow()
         self.ui = mainpage.Ui_MainPageWindow()
