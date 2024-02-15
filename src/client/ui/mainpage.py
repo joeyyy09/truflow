@@ -9,6 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from basicdetails import online_friends_signal
+from PyQt5.QtWidgets import QLabel, QVBoxLayout, QWidget
 
 # Appending parent sibling directories (packages) to import them
 import pathlib
@@ -87,6 +89,7 @@ class Ui_MainPageWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        online_friends_signal.online_friends_updated.connect(self.update_online_friends)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -103,6 +106,21 @@ class Ui_MainPageWindow(object):
         self.groupBox_4.setTitle(_translate("MainWindow", "Chat with your friends"))
         self.textEdit.setPlaceholderText(_translate("MainWindow", " Enter your message here"))
         self.pushButton_5.setText(_translate("MainWindow", "Send Message"))
+
+    def update_online_friends(self, online_friends):
+        # Clear existing online friends from the Friends box
+        print("Online Users:", online_friends)
+        for i in reversed(range(self.groupBox_3.layout().count())):
+            widget = self.groupBox_3.layout().itemAt(i).widget()
+            self.groupBox_3.layout().removeWidget(widget)
+            widget.setParent(None)
+
+        # Add online friends to the Friends box
+        layout = QVBoxLayout()
+        for username, _ in online_friends.items():
+            label = QLabel(username)
+            layout.addWidget(label)
+        self.groupBox_3.setLayout(layout)
 
 
 if __name__ == "__main__":
