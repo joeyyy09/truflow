@@ -86,5 +86,3 @@ python client/client.py
 
 Feel free to submit issues and pull requests to help improve the application. Your contributions are welcome! 💻🌟
 ```
-
-This version enhances the readability and engagement of your README with emojis that help visualize different sections and features. Let me know if you'd like any further modifications!
