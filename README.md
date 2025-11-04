@@ -89,6 +89,7 @@
     - Server IP configuration
     - Desktop notification preferences
     - Persistent settings storage
+<img width="737" height="618" alt="image" src="https://github.com/user-attachments/assets/16c4eba9-e5a4-4225-8c53-ec253049557c" />
 
 ---
 
