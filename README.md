@@ -342,7 +342,6 @@ Upon first run, Truflow creates the following directory structure in your home d
 1. **File Request**:
 
    - Client sends file request with file path and port
-   - Request includes optional hash verification flag
    - Request includes resume offset for interrupted downloads
 
 2. **File Sending**:
@@ -350,7 +349,6 @@ Upon first run, Truflow creates the following directory structure in your home d
    - Sender opens dedicated socket for file transfer
    - Sends file metadata (path, size, hash)
    - Streams file data in chunks (16KB buffer)
-   - Uses `sendfile()` on Unix systems for performance
    - Falls back to chunked send on other systems
 
 3. **File Receiving**:
@@ -366,8 +364,6 @@ Upon first run, Truflow creates the following directory structure in your home d
 
 - Real-time progress bars per file
 - Percentage completion display
-- Transfer speed calculation (future)
-- Estimated time remaining (future)
 
 **Resume Functionality:**
 
@@ -390,9 +386,6 @@ Upon first run, Truflow creates the following directory structure in your home d
 **Message Features:**
 
 - Maximum message length: 256 characters
-- HTML-formatted message display
-- Sender identification (username or "You")
-- Color-coded messages (self vs. others)
 - Desktop notifications for new messages (if enabled)
 - Message history per user
 
@@ -425,25 +418,8 @@ Upon first run, Truflow creates the following directory structure in your home d
 - Server maintains `uname_to_status` dictionary
 - Client updates UI based on received status
 
-### 8. File Compression
 
-**Current Status:**
-
-- Compression infrastructure is defined in the codebase (constants, enums, directory paths)
-- Compression threshold constant exists: 500MB (`COMPRESSION_THRESHOLD`)
-- CompressionMethod enum includes ZSTD support
-- **Note:** Actual compression/decompression logic is **not yet implemented** in the current codebase
-- Files are currently shared without compression regardless of size
-- The `compressed/` directory is created but not used
-
-**Planned Implementation:**
-
-- Automatic compression for files larger than 500MB
-- ZSTD compression method
-- Compressed files stored in `compressed/` directory
-- Transparent compression/decompression during transfer
-
-### 9. Download Management
+### 8. Download Management
 
 **Download States:**
 
@@ -469,7 +445,7 @@ Upon first run, Truflow creates the following directory structure in your home d
 - Pause/resume toggle button
 - Widget automatically removed when download completes
 
-### 10. Settings & Configuration
+### 9. Settings & Configuration
 
 **Configurable Settings:**
 
@@ -479,21 +455,6 @@ Upon first run, Truflow creates the following directory structure in your home d
 - **Username**: Your display name on the network
 - **Show Notifications**: Enable/disable desktop notifications
 
-**Settings Storage:**
-
-- Settings stored in `~/.Truflow/db/settings.json`
-- JSON format for easy editing
-- Settings persist across sessions
-- Application restart required for some changes
-
-**Accessing Settings:**
-
-- Click "Settings" button in main window
-- Modify any setting
-- Click "Apply" to save
-- Restart application if prompted
-
----
 
 ## Project Structure
 
@@ -569,7 +530,6 @@ Client settings are defined in `src/utils/constants.py`:
 - `CLIENT_RECV_PORT` (default: 4321): Port for peer-to-peer communication
 - `FILE_BUFFER_LEN` (default: 16KB): File transfer buffer size
 - `HASH_BUFFER_LEN` (default: 16MB): Hash calculation buffer size
-- `COMPRESSION_THRESHOLD` (default: 500MB): File size threshold for compression
 - `HEARTBEAT_TIMER` (default: 5 seconds): Heartbeat interval
 - `MESSAGE_MAX_LEN` (default: 256 bytes): Maximum message length
 
@@ -656,13 +616,6 @@ User settings are stored in `~/.Truflow/db/settings.json`:
 ```
 
 ### Socket Configuration
-
-**Performance Optimizations:**
-
-- `TCP_NODELAY`: Disable Nagle's algorithm for low latency
-- `SO_REUSEADDR`: Allow address reuse
-- `IP_TOS`: Set Type of Service flags (throughput + low delay)
-- `sendfile()`: Use zero-copy file transfer on Unix systems
 
 ### Threading Model
 
@@ -753,21 +706,6 @@ User settings are stored in `~/.Truflow/db/settings.json`:
 - Location: `~/.Truflow/logs/client_YYYY-MM-DD_HH-MM-SS.log`
 - Contains: UI events, transfer progress, errors
 
-### Debugging
-
-**Enable Debug Logging:**
-
-- Logging level is set to `DEBUG` by default
-- Check log files for detailed error messages
-- Use `logging.debug()` statements throughout code
-
-**Network Debugging:**
-
-- Use `netstat` or `ss` to check listening ports
-- Use `tcpdump` or Wireshark to inspect network traffic
-- Check firewall logs for blocked connections
-
----
 
 ## Contributing
 
@@ -779,27 +717,6 @@ User settings are stored in `~/.Truflow/db/settings.json`:
 4. Test thoroughly
 5. Submit a pull request
 
-### Code Style
-
-- Follow PEP 8 Python style guide
-- Use type hints where applicable
-- Document functions with docstrings
-- Maintain consistent naming conventions
-
-### Testing
-
-- Test all features before submitting
-- Test on multiple operating systems if possible
-- Verify network functionality in different scenarios
-- Check error handling and edge cases
-
----
-
-## License
-
-[Add your license information here]
-
----
 
 ## Acknowledgments
 
