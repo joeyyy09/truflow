@@ -21,6 +21,8 @@
 
 ## Features
 
+<img width="737" height="618" alt="image" src="https://github.com/user-attachments/assets/16c4eba9-e5a4-4225-8c53-ec253049557c" />
+
 ### Core Features
 
 1. **User Registration & Authentication**
@@ -34,7 +36,7 @@
    - Share entire folders and individual files
    - Automatic directory structure scanning
    - Real-time share data synchronization with server
-   - File metadata tracking (size, hash, compression)
+   - File metadata tracking (size, hash)
 
 3. **File Browsing**
 
@@ -70,26 +72,19 @@
    - Heartbeat mechanism for status updates
    - Automatic user status refresh
 
-8. **File Compression**
-
-   - Automatic compression for large files (>500MB)
-   - ZSTD compression support
-   - Transparent compression/decompression
-
-9. **Download Management**
+8. **Download Management**
 
    - Multiple simultaneous downloads
    - Download queue management
    - Progress tracking for individual files
    - Download history and status tracking
 
-10. **Settings & Configuration**
+9. **Settings & Configuration**
     - Customizable share folder path
     - Customizable downloads folder path
     - Server IP configuration
     - Desktop notification preferences
     - Persistent settings storage
-<img width="737" height="618" alt="image" src="https://github.com/user-attachments/assets/16c4eba9-e5a4-4225-8c53-ec253049557c" />
 
 ---
 
@@ -283,7 +278,6 @@ Upon first run, Truflow creates the following directory structure in your home d
 - File path (relative to share folder)
 - File size (in bytes)
 - File hash (SHA-1, calculated on-demand)
-- Compression method (if applicable)
 - File type (file or directory)
 
 **Sharing Options:**

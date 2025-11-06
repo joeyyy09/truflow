@@ -1,0 +1,137 @@
+{
+  "_default": {
+    "1": {
+      "uname": "harshithhh",
+      "share": [
+        {
+          "path": "Interview Prep.pdf",
+          "name": "Interview Prep.pdf",
+          "hash": null,
+          "compression": 0,
+          "type": "file",
+          "size": 1556705,
+          "children": []
+        },
+        {
+          "path": ".DS_Store",
+          "name": ".DS_Store",
+          "hash": null,
+          "compression": 0,
+          "type": "file",
+          "size": 8196,
+          "children": []
+        },
+        {
+          "path": ".localized",
+          "name": ".localized",
+          "hash": null,
+          "compression": 0,
+          "type": "file",
+          "size": 0,
+          "children": []
+        },
+        {
+          "path": "Payment Receipt MLC7ZfgCK8146gkiYFeZoPfVa5u27IfShFeiuUyZQwBbb26a1_1evECwKw1OZzhSFLj7epPalJ5qPw2H2eQ_sw==.pdf",
+          "name": "Payment Receipt MLC7ZfgCK8146gkiYFeZoPfVa5u27IfShFeiuUyZQwBbb26a1_1evECwKw1OZzhSFLj7epPalJ5qPw2H2eQ_sw==.pdf",
+          "hash": null,
+          "compression": 0,
+          "type": "file",
+          "size": 144649,
+          "children": []
+        },
+        {
+          "path": "An_Intelligent_Two-Layer_Intrusion_Detection_System_for_the_Internet_of_Things.pdf",
+          "name": "An_Intelligent_Two-Layer_Intrusion_Detection_System_for_the_Internet_of_Things.pdf",
+          "hash": null,
+          "compression": 0,
+          "type": "file",
+          "size": 2759504,
+          "children": []
+        }
+      ]
+    },
+    "2": {
+      "uname": "h",
+      "share": [
+        {
+          "path": "Interview Prep.pdf",
+          "name": "Interview Prep.pdf",
+          "hash": null,
+          "compression": 0,
+          "type": "file",
+          "size": 1556705,
+          "children": []
+        },
+        {
+          "path": ".DS_Store",
+          "name": ".DS_Store",
+          "hash": null,
+          "compression": 0,
+          "type": "file",
+          "size": 8196,
+          "children": []
+        },
+        {
+          "path": ".localized",
+          "name": ".localized",
+          "hash": null,
+          "compression": 0,
+          "type": "file",
+          "size": 0,
+          "children": []
+        },
+        {
+          "path": "Payment Receipt MLC7ZfgCK8146gkiYFeZoPfVa5u27IfShFeiuUyZQwBbb26a1_1evECwKw1OZzhSFLj7epPalJ5qPw2H2eQ_sw==.pdf",
+          "name": "Payment Receipt MLC7ZfgCK8146gkiYFeZoPfVa5u27IfShFeiuUyZQwBbb26a1_1evECwKw1OZzhSFLj7epPalJ5qPw2H2eQ_sw==.pdf",
+          "hash": null,
+          "compression": 0,
+          "type": "file",
+          "size": 144649,
+          "children": []
+        },
+        {
+          "path": "An_Intelligent_Two-Layer_Intrusion_Detection_System_for_the_Internet_of_Things.pdf",
+          "name": "An_Intelligent_Two-Layer_Intrusion_Detection_System_for_the_Internet_of_Things.pdf",
+          "hash": null,
+          "compression": 0,
+          "type": "file",
+          "size": 2759504,
+          "children": []
+        }
+      ]
+    },
+    "3": {
+      "uname": "fake_user_1",
+      "share": [
+        {
+          "path": "Movies",
+          "name": "Movies",
+          "hash": null,
+          "compression": 0,
+          "type": "directory",
+          "size": null,
+          "children": [
+            {
+              "path": "My_Awesome_Movie.mp4",
+              "name": "My_Awesome_Movie.mp4",
+              "hash": null,
+              "compression": 0,
+              "type": "file",
+              "size": 1073741824,
+              "children": null
+            }
+          ]
+        },
+        {
+          "path": "report.pdf",
+          "name": "report.pdf",
+          "hash": null,
+          "compression": 0,
+          "type": "file",
+          "size": 1234567,
+          "children": null
+        }
+      ]
+    }
+  }
+}

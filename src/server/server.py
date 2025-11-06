@@ -67,6 +67,24 @@ ip_to_uname: dict[str, str] = {}
 # Mapping from username to last seen timestamp
 uname_to_status: dict[str, float] = {}
 
+# offline_time = time.time() - 3600
+
+# # To lookup IP of a given username
+# uname_to_ip: dict[str, str] = {
+#     "demo_user_1": "192.168.1.99",
+#     "demo_user_2": "192.168.1.98"
+# }
+# # To lookup username of a given IP
+# ip_to_uname: dict[str, str] = {
+#     "192.168.1.99": "demo_user_1",
+#     "192.168.1.98": "demo_user_2"
+# }
+# # Mapping from username to last seen timestamp
+# uname_to_status: dict[str, float] = {
+#     "demo_user_1": offline_time,
+#     "demo_user_2": offline_time
+# }
+
 
 def receive_msg(client_socket: socket.socket) -> SocketMessage:
     """Receives incoming requests from peers
