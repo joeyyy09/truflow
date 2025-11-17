@@ -1,6 +1,7 @@
 # Truflow
+**TruFlow** is a high-performance hybrid peer-to-peer (P2P) file-sharing and communication platform built in Python with a PyQt5 interface. It uses a custom binary application-layer protocol over TCP, featuring a 1-byte opcode and a 15-byte length field, allowing efficient multiplexing of real-time chat, file discovery, and heartbeat traffic over a single persistent connection.
 
-**Truflow** is a comprehensive peer-to-peer (P2P) file sharing application built with Python and PyQt5. It enables users to share files, browse shared content, search for files across the network, and communicate with each other through an intuitive graphical interface. The application uses a hybrid client-server architecture where a central server facilitates peer discovery and coordination, while actual file transfers occur directly between peers.
+The architecture cleanly separates the centralized control plane—responsible for fast peer discovery and fuzzy search—from the decentralized data plane, which handles direct P2P file transfers. With TCP_NODELAY and IPTOS socket optimizations and a non-blocking QThread-driven I/O model, TruFlow maintains highly concurrent, low-latency performance across all network operations.
 
 ---
 
